@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <xtensor/xarray.hpp>
-#include <cmath>
+#include "mathutils.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

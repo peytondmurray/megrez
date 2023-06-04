@@ -32,12 +32,14 @@
 *.app
 
 .cache
+build
 
 # Python
 __pycache__
 .ipynb_checkpoints
 *.ipynb
 .ruff_cache
+.mypy_cache
 
 # Data files
 *.csv

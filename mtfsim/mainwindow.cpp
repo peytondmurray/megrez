@@ -34,13 +34,30 @@ void MainWindow::loadPlots() {
     xt::xarray<double> x = xt::linspace(-1, 1, ndata);
     xt::xarray<double> y = xt::linspace(-1, 1, ndata);
 
+
     xt::xarray<double>::shape_type shape(ndata, ndata);
     xt::xarray<double> z(shape);
+    auto v = x(0);
 
-    for (auto i: x) {
-        for (auto j: y) {
-            z(i, j) = std::sph_bessel(1,)
+    for (int i=0; i<x.size(); i++) {
+        for (int j=0; j<y.size(); j++) {
+            z(i, j) = std::sph_bessel(1, xyToR(x(i), y(j)));
+            // colorMap->data()->setCell(i, j, z(i, j));
         }
     }
 
+    // QCPColorScale *colorScale = new QCPColorScale(ui->leftPlot);
+    // ui->leftPlot->plotLayout()->addElement(0, 1, colorScale);
+    // colorScale->setType(QCPAxis::atRight);
+    // colorMap->setColorScale(colorScale);
+    // colorScale->axis()->setLabel("Intensity");
+    // colorMap->setGradient(QCPColorGradient::gpPolar);
+    //
+    // colorMap->rescaleDataRange();
+    //
+    // QCPMarginGroup *marginGroup = new QCPMarginGroup(ui->leftPlot);
+    // ui->leftPlot->axisRect()->setMarginGroup(QCP::msBottom|QCP::msTop, marginGroup);
+    // colorScale->setMarginGroup(QCP::msBottom|QCP::msTop, marginGroup);
+    //
+    // ui->leftPlot->rescaleAxes();
 }
