@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <xtensor/xarray.hpp>
+#include "xarrayqcp.h"
+#include "qcustomplot.h"
 #include "mathutils.h"
 
 QT_BEGIN_NAMESPACE

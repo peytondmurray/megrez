@@ -29,6 +29,7 @@ sources = [
   'main.cpp',
   'mainwindow.cpp',
   'mathutils.cpp',
+  'xarrayqcp.cpp',
   'qcustomplot/qcustomplot.cpp'
 ]
 
