@@ -25,13 +25,11 @@ void MainWindow::loadPlots() {
     xt::xarray<double> y = xt::linspace<double>(-1, 1, ny);
     xt::xarray<double> z(shape);
 
-    for (int i=0; i<nx; i++) {
-        for (int j=0; j<ny; j++) {
+    for (size_t i=0; i<nx; i++) {
+        for (size_t j=0; j<ny; j++) {
             z(i, j) = std::sph_bessel(1, xyToR(x(i), y(j)));
         }
     }
-
-    // std::cout << z << std::endl;
 
     colorMap->plotData(x, y, z);
 }

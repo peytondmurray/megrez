@@ -42,19 +42,6 @@ void XArrayQCPColorMap::plotData(
     double ymin = -1;
     double ymax = 1;
 
-    // int xamin = xt::amin(x)();
-    // int xamax = xt::amax(x)();
-    // int yamin = xt::amin(y)();
-    // int yamax = xt::amax(y)();
-    //
-    // double xmin = x(xamin);
-    // double xmax = x(xamax);
-    // double ymin = y(yamin);
-    // double ymax = y(yamax);
-
-    // printf("%d, %d, %d, %d\n", xamin, xamax, yamin, yamax);
-    // printf("%f, %f, %f, %f", xmin, xmax, ymin, ymax);
-
     this->data()->setSize(nx, ny);
     this->data()->setRange(
         QCPRange(xmin, xmax),
@@ -102,14 +89,9 @@ void XArrayQCPColorMap::setData(
         QCPRange(x(0), x(x.size()-1)),
         QCPRange(y(0), y(y.size()-1))
     );
-
-    double xv, yv;
     for (int i=0; i<nx; i++) {
         for (int j=0; j<ny; j++) {
-            data->setData(x(i), y(i), z(i, j));
-            // data->cellToCoord(i, j, &xv, &yv);
-            // data->setData(i, j, z(i, j));
-            // data->setCell(i, j, std::sph_bessel(1, xyToR(xv, yv)));
+            data->setCell(i, j, z(i, j));
         }
     }
     QCPColorMap::setData(data, copy);
