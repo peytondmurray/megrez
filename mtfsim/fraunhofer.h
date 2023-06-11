@@ -2,21 +2,23 @@
 #define FRAUNHOFER_H
 
 #include <xtensor/xarray.hpp>
+#include "mathutils.h"
 #include <cmath>
 
 class Aperture {
 public:
-    virtual double transmittance();
-    virtual double intensity();
+    virtual double transmittance(double x, double y);
+    virtual double intensity(double x, double y);
 };
 
 class Circle : Aperture {
 public:
-    double transmittance();
+    Circle(double diameter);
+    double transmittance(double x, double y);
+    double intensity(double x, double y);
 
 private:
-    // Aperture
-    double l;
+    double diameter;
 };
 
 #endif // FRAUNHOFER_H
