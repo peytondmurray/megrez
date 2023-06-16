@@ -30,7 +30,8 @@ sources = [
   'mainwindow.cpp',
   'mathutils.cpp',
   'xarrayqcp.cpp',
-  'qcustomplot/qcustomplot.cpp'
+  'qcustomplot/qcustomplot.cpp',
+  'fraunhofer.cpp'
 ]
 
 forms = [

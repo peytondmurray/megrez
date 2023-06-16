@@ -20,7 +20,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void loadPlots();
+    void loadPlots(double zval);
 
 private:
     Ui::MainWindow *ui;
