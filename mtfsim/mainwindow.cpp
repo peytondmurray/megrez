@@ -11,16 +11,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->rightPlot->addGraph();
     ui->rightPlot->axisRect()->setupFullAxesBox(true);
 
-    QObject::connect(this->zSpinBox, &QDoubleSpinBox::textChanged, this, this->loadPlots);
+    QObject::connect(ui->zSpinBox, &QDoubleSpinBox::valueChanged, this, &MainWindow::loadPlots);
+    QObject::connect(ui->apertureSpinBox, &QDoubleSpinBox::valueChanged, this, &MainWindow::loadPlots);
+    QObject::connect(ui->zSpinBox, &QDoubleSpinBox::valueChanged, this, &MainWindow::loadPlots);
+
+    this->initPlots();
+    this->loadPlots();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::loadPlots(double zval) {
-    XArrayQCPColorMap *colorMap = new XArrayQCPColorMap(ui->leftPlot);
+void MainWindow::initPlots() {
+    this->diffractionPlot = new XArrayQCPColorMap(
+        ui->leftPlot,
+        "x",
+        "y",
+        "Intensity"
+    );
+}
 
+void MainWindow::loadPlots() {
     // Number of data points along x and y
     unsigned long nx = 1000;
     unsigned long ny = 1000;
@@ -29,14 +41,14 @@ void MainWindow::loadPlots(double zval) {
     xt::xarray<double> y = xt::linspace<double>(-10, 10, ny);
     xt::xarray<double> z(shape);
 
-    Circle c = Circle(152.0, 1000, 1000); // Aperture in mm
-    double lambda = 532e-6; // Wavelength in mm
+    Circle c = Circle(ui->apertureSpinBox->value(), 1000, 1000);    // Aperture in mm
+    double lambda = ui->wavelengthSpinBox->value()*1e-6;            // Wavelength in mm
 
     for (size_t i=0; i<nx; i++) {
         for (size_t j=0; j<ny; j++) {
-            z(i, j) = c.intensity(x(i), y(j), zval, lambda);
+            z(i, j) = c.intensity(x(i), y(j), ui->zSpinBox->value(), lambda);
         }
     }
 
-    colorMap->plotData(x, y, z);
+    this->diffractionPlot->plotData(x, y, z);
 }

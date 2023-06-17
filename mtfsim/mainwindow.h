@@ -19,10 +19,13 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void initPlots();
 
-    void loadPlots(double zval);
+public slots:
+    void loadPlots();
 
 private:
     Ui::MainWindow *ui;
+    XArrayQCPColorMap *diffractionPlot;
 };
 #endif // MAINWINDOW_H

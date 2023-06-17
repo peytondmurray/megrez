@@ -14,24 +14,16 @@ public:
 
     XArrayQCPColorMap(
         QCustomPlot *plot,
+        const char *xlabel,
+        const char *ylabel,
+        const char *zlabel,
         QCPColorGradient colorGradient = QCPColorGradient::gpGrayscale
     );
 
     void plotData(
         const xt::xarray<double> &x,
         const xt::xarray<double> &y,
-        const xt::xarray<double> &z,
-        const char *xlabel = "x",
-        const char *ylabel = "y",
-        const char *zlabel = "z"
-    );
-    void plotData(
-        const xt::xarray<double> &x,
-        const xt::xarray<double> &y,
-        const xt::xarray<double> &z,
-        const QString xlabel,
-        const QString ylabel,
-        const QString zlabel
+        const xt::xarray<double> &z
     );
     void setData(
         const xt::xarray<double> &x,
