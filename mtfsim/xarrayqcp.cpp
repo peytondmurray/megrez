@@ -12,6 +12,7 @@ XArrayQCPColorMap::XArrayQCPColorMap(
 ) : QCPColorMap(plot->xAxis, plot->yAxis) {
     this->scale = nullptr;
     this->marginGroup = nullptr;
+    this->setInterpolate(false);
 
     this->colorGradient = colorGradient;
     this->keyAxis()->setLabel(QString(xlabel));
@@ -22,7 +23,7 @@ XArrayQCPColorMap::XArrayQCPColorMap(
     this->parentPlot()->plotLayout()->addElement(0, 1, this->scale);
     this->scale->setType(QCPAxis::atRight);
     this->setColorScale(this->scale);
-    this->scale->axis()->setLabel("Intensity");
+    this->scale->axis()->setLabel(zlabel);
     this->scale->setGradient(this->colorGradient);
 
     // Set a margin
@@ -36,16 +37,6 @@ void XArrayQCPColorMap::plotData(
     const xt::xarray<double> &y,
     const xt::xarray<double> &z
 ) {
-
-    int nx = x.shape(0);
-    int ny = y.shape(0);
-
-    this->data()->setSize(nx, ny);
-    this->data()->setRange(
-        QCPRange(xt::amin(x)(0), xt::amax(x)(0)),
-        QCPRange(xt::amin(y)(0), xt::amax(y)(0))
-    );
-
     this->setData(x, y, z);
     this->rescaleDataRange();
     this->parentPlot()->rescaleAxes();
@@ -62,8 +53,8 @@ void XArrayQCPColorMap::setData(
     QCPColorMapData *data = new QCPColorMapData(
         z.shape(0),
         z.shape(1),
-        QCPRange(x(0), x(x.size()-1)),
-        QCPRange(y(0), y(y.size()-1))
+        QCPRange(xt::amin(x)(0), xt::amax(x)(0)),
+        QCPRange(xt::amin(y)(0), xt::amax(y)(0))
     );
 
     double zmax = xt::amax(z)(0);

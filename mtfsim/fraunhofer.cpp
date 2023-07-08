@@ -11,7 +11,7 @@ Circle::Circle(double diameter, int nx, int ny) : Aperture(nx, ny) {
     this->l = diameter;
 }
 
-double Circle::transmittance(double x, double y, double z) {
+double Circle::transmittance(double x, double y) {
     if (xyToR(x, y) > this->l/2) {
         return 0;
     }

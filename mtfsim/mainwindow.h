@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QEvent>
 #include <xtensor/xarray.hpp>
 #include <xtensor/xio.hpp>
 #include <xtensor/xadapt.hpp>
@@ -23,9 +24,12 @@ public:
 
 public slots:
     void loadPlots();
+    void leftMouseMoved(QMouseEvent*);
+    void rightMouseMoved(QMouseEvent*);
 
 private:
     Ui::MainWindow *ui;
+    XArrayQCPColorMap *transmittancePlot;
     XArrayQCPColorMap *diffractionPlot;
 };
 #endif // MAINWINDOW_H
