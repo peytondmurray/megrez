@@ -1,0 +1,3 @@
+[submodule "pyspherometer"]
+	path = pyspherometer
+	url = git@github.com:peytondmurray/pyspherometer

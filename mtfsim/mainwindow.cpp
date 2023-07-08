@@ -34,14 +34,14 @@ void MainWindow::initPlots() {
 
 void MainWindow::loadPlots() {
     // Number of data points along x and y
-    unsigned long nx = 1000;
-    unsigned long ny = 1000;
+    unsigned long nx = 100;
+    unsigned long ny = 100;
     xt::xarray<double>::shape_type shape({nx, ny});
-    xt::xarray<double> x = xt::linspace<double>(-10, 10, nx);
-    xt::xarray<double> y = xt::linspace<double>(-10, 10, ny);
+    xt::xarray<double> x = xt::linspace<double>(-1, 1, nx);
+    xt::xarray<double> y = xt::linspace<double>(-1, 1, ny);
     xt::xarray<double> z(shape);
 
-    Circle c = Circle(ui->apertureSpinBox->value(), 1000, 1000);    // Aperture in mm
+    Circle c = Circle(ui->apertureSpinBox->value(), nx, ny);    // Aperture in mm
     double lambda = ui->wavelengthSpinBox->value()*1e-6;            // Wavelength in mm
 
     for (size_t i=0; i<nx; i++) {

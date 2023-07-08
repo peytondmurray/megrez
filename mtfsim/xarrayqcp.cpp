@@ -1,6 +1,7 @@
 #include "mathutils.h"
 #include "xarrayqcp.h"
 #include <xtensor/xmath.hpp>
+#include <xtensor/xio.hpp>
 
 XArrayQCPColorMap::XArrayQCPColorMap(
     QCustomPlot *plot,
@@ -39,15 +40,10 @@ void XArrayQCPColorMap::plotData(
     int nx = x.shape(0);
     int ny = y.shape(0);
 
-    double xmin = -1;
-    double xmax = 1;
-    double ymin = -1;
-    double ymax = 1;
-
     this->data()->setSize(nx, ny);
     this->data()->setRange(
-        QCPRange(xmin, xmax),
-        QCPRange(ymin, ymax)
+        QCPRange(xt::amin(x)(0), xt::amax(x)(0)),
+        QCPRange(xt::amin(y)(0), xt::amax(y)(0))
     );
 
     this->setData(x, y, z);
@@ -69,9 +65,12 @@ void XArrayQCPColorMap::setData(
         QCPRange(x(0), x(x.size()-1)),
         QCPRange(y(0), y(y.size()-1))
     );
+
+    double zmax = xt::amax(z)(0);
+
     for (int i=0; i<nx; i++) {
         for (int j=0; j<ny; j++) {
-            data->setCell(i, j, z(i, j));
+            data->setCell(i, j, z(i, j)/zmax);
         }
     }
     QCPColorMap::setData(data, copy);
