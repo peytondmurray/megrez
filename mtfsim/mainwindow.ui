@@ -94,7 +94,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -129,8 +129,16 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+          </font>
+         </property>
          <property name="text">
           <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -161,8 +169,16 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+          </font>
+         </property>
          <property name="text">
           <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>

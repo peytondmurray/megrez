@@ -30,43 +30,46 @@ void MainWindow::initPlots() {
         ui->leftPlot,
         "x",
         "y",
-        "Intensity"
+        "Transmittance",
+        -1,
+        1,
+        -1,
+        1
     );
     this->diffractionPlot = new XArrayQCPColorMap(
         ui->rightPlot,
         "x",
         "y",
-        "Intensity"
+        "Intensity",
+        -1,
+        1,
+        -1,
+        1
     );
 }
 
 void MainWindow::loadPlots() {
-    // Number of data points along x and y
     unsigned long nx = 100;
     unsigned long ny = 100;
-    xt::xarray<double>::shape_type shape({nx, ny});
-    xt::xarray<double> x = xt::linspace<double>(-1, 1, nx);
-    xt::xarray<double> y = xt::linspace<double>(-1, 1, ny);
-    xt::xarray<double> intensity(shape);
-    xt::xarray<double> transmittance(shape);
 
     Circle c = Circle(ui->apertureSpinBox->value(), nx, ny);    // Aperture in mm
     double lambda = ui->wavelengthSpinBox->value()*1e-6;            // Wavelength in mm
+    double zVal = ui->zSpinBox->value();
 
-    for (size_t i=0; i<nx; i++) {
-        for (size_t j=0; j<ny; j++) {
-            intensity(i, j) = c.intensity(x(i), y(j), ui->zSpinBox->value(), lambda);
-            transmittance(i, j) = c.transmittance(x(i), y(j));
+    this->diffractionPlot->plotData(
+        [lambda, &c, zVal](double x, double y) -> double {
+            return c.intensity(x, y, zVal, lambda);
         }
-    }
-
-    this->diffractionPlot->plotData(x, y, intensity);
-    this->transmittancePlot->plotData(x, y, transmittance);
+    );
+    this->transmittancePlot->plotData(
+        [&c](double x, double y) -> double {
+            return c.transmittance(x, y);
+        }
+    );
 }
 
 void MainWindow::leftMouseMoved(QMouseEvent *event) {
     double x, y, z;
-
 
     this->transmittancePlot->pixelsToCoords(
         event->pos().x(),
@@ -77,7 +80,7 @@ void MainWindow::leftMouseMoved(QMouseEvent *event) {
     z = this->transmittancePlot->data()->data(x, y);
 
     ui->leftPlotMouseCoordsLabel->setText(
-        QString("x: %1 y: %2 z: %3").arg(x).arg(y).arg(z)
+        QString("x: %1 y: %2 z: %3").arg(x, 6, 'g', 3).arg(y, 6, 'g', 3).arg(z, 6, 'g', 3)
     );
 }
 
@@ -92,6 +95,6 @@ void MainWindow::rightMouseMoved(QMouseEvent *event) {
     z = this->diffractionPlot->data()->data(x, y);
 
     ui->rightPlotMouseCoordsLabel->setText(
-        QString("x: %1 y: %2 z: %3").arg(x).arg(y).arg(z)
+        QString("x: %1 y: %2 z: %3").arg(x, 6, 'g', 3).arg(y, 6, 'g', 3).arg(z, 6, 'g', 3)
     );
 }

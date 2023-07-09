@@ -8,6 +8,10 @@ XArrayQCPColorMap::XArrayQCPColorMap(
     const char *xlabel,
     const char *ylabel,
     const char *zlabel,
+    double xmin,
+    double xmax,
+    double ymin,
+    double ymax,
     QCPColorGradient colorGradient
 ) : QCPColorMap(plot->xAxis, plot->yAxis) {
     this->scale = nullptr;
@@ -30,6 +34,35 @@ XArrayQCPColorMap::XArrayQCPColorMap(
     this->marginGroup = new QCPMarginGroup(this->parentPlot());
     this->parentPlot()->axisRect()->setMarginGroup(QCP::msBottom|QCP::msTop, marginGroup);
     this->scale->setMarginGroup(QCP::msBottom|QCP::msTop, marginGroup);
+
+    this->data()->setKeyRange(QCPRange(xmin, xmax));
+    this->data()->setValueRange(QCPRange(ymin, ymax));
+}
+
+void XArrayQCPColorMap::plotData(std::function<double(double, double)> zfunc) {
+    this->setData(zfunc);
+    this->rescaleDataRange();
+    this->parentPlot()->rescaleAxes();
+}
+
+void XArrayQCPColorMap::setData(std::function<double(double, double)> zfunc, bool copy) {
+    QCPColorMapData *data = this->data();
+    QCPColorMapData *newdata = new QCPColorMapData(
+        data->keySize(),
+        data->valueSize(),
+        data->keyRange(),
+        data->valueRange()
+    );
+
+    double x, y;
+    for (int i=0; i<data->keySize(); i++) {
+        for (int j=0; j<data->valueSize(); j++) {
+            double z = zfunc(x, y);
+            data->cellToCoord(i, j, &x, &y);
+            newdata->setCell(i, j, z);
+        }
+    }
+    QCPColorMap::setData(newdata, copy);
 }
 
 void XArrayQCPColorMap::plotData(
@@ -38,6 +71,7 @@ void XArrayQCPColorMap::plotData(
     const xt::xarray<double> &z
 ) {
     this->setData(x, y, z);
+    this->parentPlot()->replot();
     this->rescaleDataRange();
     this->parentPlot()->rescaleAxes();
 }
@@ -65,5 +99,4 @@ void XArrayQCPColorMap::setData(
         }
     }
     QCPColorMap::setData(data, copy);
-    this->parentPlot()->replot();
 }

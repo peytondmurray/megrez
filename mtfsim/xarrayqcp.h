@@ -17,8 +17,19 @@ public:
         const char *xlabel,
         const char *ylabel,
         const char *zlabel,
+        double xmin,
+        double xmax,
+        double ymin,
+        double ymax,
         QCPColorGradient colorGradient = QCPColorGradient::gpGrayscale
     );
+
+    void plotData(std::function<double(double, double)>);
+    void setData(
+        std::function<double(double, double)>,
+        bool copy=false
+    );
+
 
     void plotData(
         const xt::xarray<double> &x,
