@@ -1,6 +1,7 @@
 #ifndef FRAUNHOFER_H
 #define FRAUNHOFER_H
 
+#include <qcustomplot.h>
 #include <xtensor/xarray.hpp>
 #include "mathutils.h"
 #include <cmath>
@@ -22,6 +23,8 @@ public:
     Circle(double diameter, int nx = 1000, int ny = 1000);
     double transmittance(double x, double y);
     double intensity(double x, double y, double z, double lambda);
+    QCPRange xrange;
+    QCPRange yrange;
 
 private:
     double l;       // Diameter

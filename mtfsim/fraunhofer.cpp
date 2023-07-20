@@ -9,10 +9,12 @@ Aperture::~Aperture() {}
 
 Circle::Circle(double diameter, int nx, int ny) : Aperture(nx, ny) {
     this->l = diameter;
+    this->xrange = QCPRange(-diameter/2.0, diameter/2.0);
+    this->yrange = QCPRange(-diameter/2.0, diameter/2.0);
 }
 
 double Circle::transmittance(double x, double y) {
-    if (xyToR(x, y) > this->l/2) {
+    if (xyToR(x, y) > this->l/2.0) {
         return 0;
     }
     return 1;

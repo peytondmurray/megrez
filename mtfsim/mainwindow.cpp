@@ -49,22 +49,26 @@ void MainWindow::initPlots() {
 }
 
 void MainWindow::loadPlots() {
-    unsigned long nx = 100;
-    unsigned long ny = 100;
+    unsigned long nx = 1000;
+    unsigned long ny = 1000;
 
     Circle c = Circle(ui->apertureSpinBox->value(), nx, ny);    // Aperture in mm
     double lambda = ui->wavelengthSpinBox->value()*1e-6;            // Wavelength in mm
     double zVal = ui->zSpinBox->value();
 
-    this->diffractionPlot->plotData(
-        [lambda, &c, zVal](double x, double y) -> double {
-            return c.intensity(x, y, zVal, lambda);
-        }
-    );
     this->transmittancePlot->plotData(
         [&c](double x, double y) -> double {
             return c.transmittance(x, y);
-        }
+        },
+        c.xrange,
+        c.yrange
+    );
+    this->diffractionPlot->plotData(
+        [lambda, &c, zVal](double x, double y) -> double {
+            return c.intensity(x, y, zVal, lambda);
+        },
+        c.xrange,
+        c.yrange
     );
 }
 

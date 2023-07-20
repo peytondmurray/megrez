@@ -24,7 +24,7 @@ public:
         QCPColorGradient colorGradient = QCPColorGradient::gpGrayscale
     );
 
-    void plotData(std::function<double(double, double)>);
+    void plotData(std::function<double(double, double)>, QCPRange xrange, QCPRange yrange);
     void setData(
         std::function<double(double, double)>,
         bool copy=false
@@ -40,6 +40,13 @@ public:
         const xt::xarray<double> &x,
         const xt::xarray<double> &y,
         const xt::xarray<double> &z,
+        bool copy=false
+    );
+
+    void setDataRescaled(
+        std::function<double(double, double)> zfunc,
+        QCPRange xrange,
+        QCPRange yrange,
         bool copy=false
     );
 };

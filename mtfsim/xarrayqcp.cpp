@@ -37,28 +37,35 @@ XArrayQCPColorMap::XArrayQCPColorMap(
 
     this->data()->setKeyRange(QCPRange(xmin, xmax));
     this->data()->setValueRange(QCPRange(ymin, ymax));
+    this->data()->setKeySize(100);
+    this->data()->setValueSize(100);
 }
 
-void XArrayQCPColorMap::plotData(std::function<double(double, double)> zfunc) {
-    this->setData(zfunc);
+void XArrayQCPColorMap::plotData(std::function<double(double, double)> zfunc, QCPRange xrange, QCPRange yrange) {
+    this->setDataRescaled(zfunc, xrange, yrange);
     this->rescaleDataRange();
+    this->rescaleKeyAxis();
+    this->rescaleValueAxis();
     this->parentPlot()->rescaleAxes();
 }
 
 void XArrayQCPColorMap::setData(std::function<double(double, double)> zfunc, bool copy) {
-    QCPColorMapData *data = this->data();
+    setDataRescaled(zfunc, this->data()->keyRange(), this->data()->valueRange(), copy);
+}
+
+void XArrayQCPColorMap::setDataRescaled(std::function<double(double, double)> zfunc, QCPRange xrange, QCPRange yrange, bool copy) {
     QCPColorMapData *newdata = new QCPColorMapData(
-        data->keySize(),
-        data->valueSize(),
-        data->keyRange(),
-        data->valueRange()
+        this->data()->keySize(),
+        this->data()->valueSize(),
+        xrange,
+        yrange
     );
 
     double x, y;
-    for (int i=0; i<data->keySize(); i++) {
-        for (int j=0; j<data->valueSize(); j++) {
+    for (int i=0; i<newdata->keySize(); i++) {
+        for (int j=0; j<newdata->valueSize(); j++) {
+            newdata->cellToCoord(i, j, &x, &y);
             double z = zfunc(x, y);
-            data->cellToCoord(i, j, &x, &y);
             newdata->setCell(i, j, z);
         }
     }
@@ -92,7 +99,6 @@ void XArrayQCPColorMap::setData(
     );
 
     double zmax = xt::amax(z)(0);
-
     for (int i=0; i<nx; i++) {
         for (int j=0; j<ny; j++) {
             data->setCell(i, j, z(i, j)/zmax);
